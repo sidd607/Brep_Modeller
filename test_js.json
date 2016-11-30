@@ -1,0 +1,286 @@
+{
+    "model": {
+        "type": "model",
+        "id": 1,
+        "cells": [
+            1
+        ]
+    },
+    "cells": [
+        {
+            "type": "cell",
+            "id": 1,
+            "map": 1,
+            "boundary": [
+                [
+                    [
+                        2,
+                        "+"
+                    ],
+                    [
+                        3,
+                        "+"
+                    ],
+                    [
+                        4,
+                        "-"
+                    ],
+                    [
+                        5,
+                        "-"
+                    ]
+                ]
+            ]
+        },
+        {
+            "type": "cell",
+            "id": 2,
+            "map": 2,
+            "boundary": [
+                [
+                    [
+                        6,
+                        "+"
+                    ],
+                    [
+                        7,
+                        "-"
+                    ]
+                ]
+            ]
+        },
+        {
+            "type": "cell",
+            "id": 3,
+            "map": 3,
+            "boundary": [
+                [
+                    [
+                        7,
+                        "+"
+                    ],
+                    [
+                        8,
+                        "-"
+                    ]
+                ]
+            ]
+        },
+        {
+            "type": "cell",
+            "id": 4,
+            "map": 4,
+            "boundary": [
+                [
+                    [
+                        8,
+                        "-"
+                    ],
+                    [
+                        9,
+                        "+"
+                    ]
+                ]
+            ]
+        },
+        {
+            "type": "cell",
+            "id": 5,
+            "map": 5,
+            "boundary": [
+                [
+                    [
+                        9,
+                        "-"
+                    ],
+                    [
+                        6,
+                        "+"
+                    ]
+                ]
+            ]
+        },
+        {
+            "type": "cell",
+            "id": 6,
+            "map": 6,
+            "boundary": []
+        },
+        {
+            "type": "cell",
+            "id": 7,
+            "map": 7,
+            "boundary": []
+        },
+        {
+            "type": "cell",
+            "id": 8,
+            "map": 8,
+            "boundary": []
+        },
+        {
+            "type": "cell",
+            "id": 9,
+            "map": 9,
+            "boundary": []
+        }
+    ],
+    "maps": [
+        {
+            "type": "map",
+            "id": 1,
+            "mtype": "linear",
+            "space-dim": 3,
+            "dimension": 2,
+            "data": [
+                [
+                    3,
+                    0,
+                    0
+                ],
+                [
+                    0,
+                    1,
+                    0
+                ],
+                [
+                    0,
+                    0,
+                    1
+                ]
+            ]
+        },
+        {
+            "type": "map",
+            "id": 2,
+            "mtype": "linear",
+            "space-dim": 3,
+            "dimension": 1,
+            "data": [
+                [
+                    3,
+                    0,
+                    0
+                ],
+                [
+                    0,
+                    1,
+                    0
+                ]
+            ]
+        },
+        {
+            "type": "map",
+            "id": 3,
+            "mtype": "linear",
+            "space-dim": 3,
+            "dimension": 1,
+            "data": [
+                [
+                    3,
+                    4,
+                    0
+                ],
+                [
+                    0,
+                    -1,
+                    5
+                ]
+            ]
+        },
+        {
+            "type": "map",
+            "id": 4,
+            "mtype": "linear",
+            "space-dim": 3,
+            "dimension": 1,
+            "data": [
+                [
+                    3,
+                    0,
+                    5
+                ],
+                [
+                    0,
+                    1,
+                    0
+                ]
+            ]
+        },
+        {
+            "type": "map",
+            "id": 5,
+            "mtype": "linear",
+            "space-dim": 3,
+            "dimension": 1,
+            "data": [
+                [
+                    3,
+                    0,
+                    0
+                ],
+                [
+                    0,
+                    0,
+                    1
+                ]
+            ]
+        },
+        {
+            "type": "map",
+            "id": 6,
+            "mtype": "linear",
+            "space-dim": 3,
+            "dimension": 0,
+            "data": [
+                [
+                    3,
+                    0,
+                    0
+                ]
+            ]
+        },
+        {
+            "type": "map",
+            "id": 7,
+            "mtype": "linear",
+            "space-dim": 3,
+            "dimension": 0,
+            "data": [
+                [
+                    3,
+                    4,
+                    0
+                ]
+            ]
+        },
+        {
+            "type": "map",
+            "id": 8,
+            "mtype": "linear",
+            "space-dim": 3,
+            "dimension": 0,
+            "data": [
+                [
+                    3,
+                    3,
+                    5
+                ]
+            ]
+        },
+        {
+            "type": "map",
+            "id": 9,
+            "mtype": "linear",
+            "space-dim": 3,
+            "dimension": 0,
+            "data": [
+                [
+                    3,
+                    0,
+                    5
+                ]
+            ]
+        }
+    ]
+}
