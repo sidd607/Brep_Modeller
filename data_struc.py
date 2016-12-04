@@ -1,3 +1,9 @@
+import matplotlib as mpl
+from mpl_toolkits.mplot3d import Axes3D
+import numpy as np
+import matplotlib.pyplot as plt
+
+
 class Model:
     def __init__(self, raw_data):
         self.vertex_list = []
@@ -100,11 +106,69 @@ class Model:
         result.remove(start)
         return result
 
+    def star(self, cell_id):
+        print "Func Begin-------------------"
+        cell = self.get_cell(cell_id)
+        dim = cell.type
+        print dim
+        tmp = []
+        if dim == 2:
+            return []
+        elif dim == 1:
+            tmp = []
+            for i in self.graph[cell]:
+                print i.id, i.type
+                if i.type > 1:
+                    tmp.append(i)
+
+        elif dim == 0:
+            tmp = []
+            for i in self.graph[cell]:
+                if i.type > 0:
+                    tmp.append(i)
+                for j in self.graph[i]:
+                    if j.type > 0:
+                        tmp.append(j)
+        print "Func end---------------------"
+        return list(set(tmp))
+
     def create_cells(self):
         tmp = {}
         for i in self.cell_list:
             cell = Cell(i["id"], i["boundary"], i["map"])
             self.cells.append(cell)
+
+    def get_map_data(self, map_id):
+        map_det = self.raw_data["maps"]
+        for i in map_det:
+            if i["id"] == map_id:
+                return i["data"]
+
+    def visualize(self):
+        faces = []
+        fig = plt.figure()
+        ax = fig.gca(projection='3d')
+#        ax.plot([1,2,22], [1,2,33], [1,2,44])
+#        plt.show()
+        for i in self.cells:
+            if i.type == 2:
+                faces.append(i)
+        for i in faces:
+            for j in i.boundary_defn:
+                print j
+                for k in j:
+                    x = k.boundary_defn[0]
+                    y = k.boundary_defn[1]
+                    x_coords = self.get_map_data(x.map_id)
+                    x_coords = x_coords[0]
+                    y_coords = self.get_map_data(y.map_id)
+                    y_coords = y_coords[0]
+
+                    print x_coords, y_coords
+                    ax.plot([x_coords[0], y_coords[0]], [x_coords[1],\
+                            y_coords[1]], [x_coords[2], y_coords[2]])
+        plt.show()
+
 
 class Cell:
     def __init__(self, id, boundary, map_id):

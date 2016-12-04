@@ -28,13 +28,17 @@ if __name__ == "__main__":
     model.create_graph()
     print model.graph
     tmp = 0
+    """
     while (tmp != 99):
 
         x = int(input(">"))
         if x == 99:
             break
-            
-        result = model.connected_components(x)
+
+        result = model.star(x)
         print "------------------------------"
+
         for i in result:
             print i.id
+    """
+    model.visualize()
