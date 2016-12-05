@@ -1,25 +1,37 @@
-from mpl_toolkits.mplot3d import Axes3D
-from matplotlib import cm
-from matplotlib.ticker import LinearLocator, FormatStrFormatter
-import matplotlib.pyplot as plt
-import numpy as np
 
-fig = plt.figure()
-ax = fig.gca(projection='3d')
-X = np.arange(-5, 5, 0.25)
-Y = np.arange(-5, 5, 0.25)
-X, Y = np.meshgrid(X, Y)
-R = np.sqrt(X**2 + Y**2)
-Z = np.sin(R)
+from numpy import *
+def perp( a ) :
+    b = empty_like(a)
+    b[0] = -a[1]
+    b[1] = a[0]
+    return b
 
-print X, Y, Z
-surf = ax.plot_surface(X, Y, Z, rstride=1, cstride=1, cmap=cm.coolwarm,
-                       linewidth=0, antialiased=False)
-ax.set_zlim(-1.01, 1.01)
+# line segment a given by endpoints a1, a2
+# line segment b given by endpoints b1, b2
+# return
+def seg_intersect(a1,a2, b1,b2) :
+    da = a2-a1
+    db = b2-b1
+    dp = a1-b1
+    dap = perp(da)
+    print dap, da
+    denom = dot( dap, db)
+    print denom
+    num = dot( dap, dp )
+    return (num / denom.astype(float))*db + b1
 
-ax.zaxis.set_major_locator(LinearLocator(10))
-ax.zaxis.set_major_formatter(FormatStrFormatter('%.02f'))
+p1 = array( [3.0, 4.0, 0.0] )
+p2 = array( [3.0, 3.0, 5.0] )
 
-fig.colorbar(surf, shrink=0.5, aspect=5)
+p3 = array( [3.0, 1.0, 1.0] )
+p4 = array( [3.0, 100.0, 2.0 ] )
 
-plt.show()
+print seg_intersect( p1,p2, p3,p4)
+
+p1 = array( [2.0, 2.0] )
+p2 = array( [4.0, 3.0] )
+
+p3 = array( [6.0, 0.0] )
+p4 = array( [6.0, 3.0] )
+
+print seg_intersect( p1,p2, p3,p4)

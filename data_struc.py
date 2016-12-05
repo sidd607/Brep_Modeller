@@ -2,6 +2,8 @@ import matplotlib as mpl
 from mpl_toolkits.mplot3d import Axes3D
 import numpy as np
 import matplotlib.pyplot as plt
+import intersection
+import math
 
 
 class Model:
@@ -99,7 +101,7 @@ class Model:
 
                 stack.extend(self.graph[vertex] - visited)
         result = []
-        #print dim
+        ##print dim
         for i in visited:
             if i.type == dim:
                 result.append(i)
@@ -107,17 +109,17 @@ class Model:
         return result
 
     def star(self, cell_id):
-        print "Func Begin-------------------"
+        #print "Func Begin-------------------"
         cell = self.get_cell(cell_id)
         dim = cell.type
-        print dim
+        #print dim
         tmp = []
         if dim == 2:
             return []
         elif dim == 1:
             tmp = []
             for i in self.graph[cell]:
-                print i.id, i.type
+                #print i.id, i.type
                 if i.type > 1:
                     tmp.append(i)
 
@@ -129,7 +131,7 @@ class Model:
                 for j in self.graph[i]:
                     if j.type > 0:
                         tmp.append(j)
-        print "Func end---------------------"
+        #print "Func end---------------------"
         return list(set(tmp))
 
     def create_cells(self):
@@ -144,7 +146,7 @@ class Model:
             if i["id"] == map_id:
                 return i["data"]
 
-    def visualize(self):
+    def visualize(self, point = [0,0,0]):
         faces = []
         fig = plt.figure()
         ax = fig.gca(projection='3d')
@@ -155,7 +157,7 @@ class Model:
                 faces.append(i)
         for i in faces:
             for j in i.boundary_defn:
-                print j
+                #print j
                 for k in j:
                     x = k.boundary_defn[0]
                     y = k.boundary_defn[1]
@@ -164,11 +166,91 @@ class Model:
                     y_coords = self.get_map_data(y.map_id)
                     y_coords = y_coords[0]
 
-                    print x_coords, y_coords
+                    #print x_coords, y_coords
                     ax.plot([x_coords[0], y_coords[0]], [x_coords[1],\
                             y_coords[1]], [x_coords[2], y_coords[2]])
+        ax.plot([point[0]], [point[1]], [point[2]], 'or')
         plt.show()
 
+    def convert(self, point, point_on_plane, axis):
+        tmp = [point[x] - point_on_plane[x] for x in range(3)]
+        tmp_u = np.dot(tmp, axis[0])
+        tmp_v = np.dot(tmp, axis[1])
+        return tmp_u, tmp_v
+
+    def line_segment_intersect(self, p1, p2, p3, p4):
+        def ccw(A,B,C):
+            return (C[1]-A[1]) * (B[0]-A[0]) > (B[1]-A[1]) * (C[0]-A[0])
+
+        # Return true if line segments AB and CD intersect
+        def intersect(A,B,C,D):
+            return ccw(A,C,D) != ccw(B,C,D) and ccw(A,B,C) != ccw(A,B,D)
+
+        return intersect(p1, p2, p3, p4)
+
+    def distance(self, a,b):
+        return math.sqrt((a[0] - b[0] )**2 + (a[1] - b[1])**2)
+
+    def is_between(self, a,c,b):
+        #print a,c,b
+        #print self.distance(a,c) + self.distance(c,b) , self.distance(a,b)
+        return self.distance(a,c) + self.distance(c,b) == self.distance(a,b)
+
+    def check_point(self, point, face):
+
+        map_det = self.get_map_data(face.map_id)
+        point_on_plane = map_det[0]
+        axis = [map_det[1], map_det[2]]
+        count = 0
+        for i in face.boundary_defn:
+            for j in i:
+                p1 = j.boundary_defn[0]
+                p2 = j.boundary_defn[1]
+                p1 = self.get_map_data(p1.map_id)
+                p2 = self.get_map_data(p2.map_id)
+                p1 = p1[0]
+                p2 = p2[0]
+                p1_new = self.convert(p1, point_on_plane, axis)
+                p2_new = self.convert(p2, point_on_plane, axis)
+                point_new = self.convert(point, point_on_plane, axis)
+                #print p1_new, p2_new, point_new, [99,99]
+                if self.is_between(p1_new,point_new, p2_new):
+                    return "boundary"
+                intersect = self.line_segment_intersect(point_new, [99,99], p1_new, p2_new)
+                #print "Intersect: ", intersect
+                if intersect:
+                    count+=1
+
+        #print count
+        if count %2 == 0:
+            return "Outside"
+        else:
+            return "Inside"
+
+
+
+    def point_containment(self, point):
+        faces = []
+        for i in self.cells:
+            if i.type == 2:
+                faces.append(i)
+
+        for i in faces:
+            #print i.id
+            boundary = i.boundary_defn
+            count = 0
+            bound_det = self.get_map_data(i.map_id)
+            #print bound_det
+            point_on_plane = bound_det[0]
+            norm = np.cross(bound_det[1], bound_det[2])
+
+            if np.dot(point, norm) - np.dot(norm,point_on_plane ) != 0:
+                print "Not in plane", i.id
+            else:
+                print "---------Point Containment-------"
+                print self.check_point(point, i)
+
+            #self.visualize(point)
 
 class Cell:
     def __init__(self, id, boundary, map_id):

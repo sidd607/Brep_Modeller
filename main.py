@@ -17,8 +17,8 @@ if __name__ == "__main__":
     model.create_cells()
     for i in model.cells:
         model.update_cells(i.id)
-
-    print "-------------------------------------------------------------"
+    """
+    print -------------------------------------------------------------"
     for i in model.cells:
         print i.map_id, i.id
         print i.boundary_defn
@@ -28,6 +28,7 @@ if __name__ == "__main__":
     model.create_graph()
     print model.graph
     tmp = 0
+    """
     """
     while (tmp != 99):
 
@@ -41,4 +42,6 @@ if __name__ == "__main__":
         for i in result:
             print i.id
     """
-    model.visualize()
+    point = [3,1.5,1.5]
+    model.point_containment(point)
+    model.visualize(point)
