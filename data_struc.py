@@ -91,6 +91,7 @@ class Model:
             self.graph[i] = set(self.graph[i])
 
     def connected_components(self, cell_id):
+
         start = self.get_cell(cell_id)
         visited, stack = set(), [start]
         dim = start.type
@@ -98,7 +99,6 @@ class Model:
             vertex = stack.pop()
             if (vertex not in visited) and (vertex.type <= dim):
                 visited.add(vertex)
-
                 stack.extend(self.graph[vertex] - visited)
         result = []
         ##print dim
@@ -223,13 +223,15 @@ class Model:
 
         #print count
         if count %2 == 0:
-            return "Outside"
+            return "outside"
         else:
-            return "Inside"
+            return "inside"
+
 
 
 
     def point_containment(self, point):
+        #self.visualize(point)
         faces = []
         for i in self.cells:
             if i.type == 2:
@@ -243,15 +245,97 @@ class Model:
             #print bound_det
             point_on_plane = bound_det[0]
             norm = np.cross(bound_det[1], bound_det[2])
-
+            face_count = 1
             if np.dot(point, norm) - np.dot(norm,point_on_plane ) != 0:
-                print "Not in plane", i.id
+                face_count += 1
             else:
-                print "---------Point Containment-------"
-                print self.check_point(point, i)
+                #print "---------Point Containment-------"
+                return self.check_point(point, i)
 
-            #self.visualize(point)
+            return "outside"
+    def teselate(self):
+        faces = []
+        final_tri_set = []
+        for i in self.cells:
+            if i.type == 2:
+                faces.append(i)
+        for i in faces:
+            point_set = []
+            boundary = i.boundary_defn
+            bound_det = self.get_map_data(i.map_id)
+            point_on_plane = bound_det[0]
+            axis = [bound_det[1], bound_det[2]]
+            for j in i.boundary_defn:
+                for k in j:
+                    p1 = self.get_map_data(k.boundary_defn[0].map_id)[0]
+                    p2 = self.get_map_data(k.boundary_defn[1].map_id)[0]
+                    p1 = (p1[0], p1[1], p1[2])
+                    p2 = (p2[0], p2[1], p2[2])
+                    point_set.append(p1)
+                    point_set.append(p2)
+            #print point_set
+            point_set = list(set(point_set))
 
+            from tessalation import convert_point
+
+            triangles = convert_point(point_set, point_on_plane, axis)
+            tri_set = []
+            #print i.id
+            for tri in triangles:
+                p1 = point_set[tri[0]]
+                p2 = point_set[tri[1]]
+                p3 = point_set[tri[2]]
+                #print p1, p2, p3
+                centroid = [(p1[0] + p2[0] + p3[0])/3.0, (p1[1] + p2[1] + p3[1])/3.0, (p1[2] + p2[2] + p3[2])/3.0]
+                #print "Centroid", centroid
+                loc = self.point_containment(centroid)
+                if len(faces) != 2:
+                    if loc == "inside":
+                        tri_set.append([p1,p2,p3])
+                else:
+                    tri_set.append([p1,p2,p3])
+            final_tri_set.append(tri_set)
+            #print tri_set
+        print final_tri_set
+        self.visualize_triangle(final_tri_set)
+
+        f = open("demo.stl", "w")
+        f.write("solid cube\n")
+        for i in final_tri_set:
+            for k in i:
+                f.write("\tfacet normal 0 0 0\n")
+                f.write("\t\touter loop\n")
+                f.write("\t\t\tvertex " + str(k[0][0]) + " " + str(k[0][1]) + " " + str(k[0][2]) + "\n")
+                f.write("\t\t\tvertex " + str(k[1][0]) + " " + str(k[1][1]) + " " + str(k[1][2]) + "\n")
+                f.write("\t\t\tvertex " + str(k[2][0]) + " " + str(k[2][1]) + " " + str(k[2][2]) + "\n")
+                f.write("\t\tendloop\n")
+                f.write("\tendfacet\n")
+                #print k
+        f.write("endsolid cube\n")
+        f.close()
+
+    def visualize_triangle(self, point_set):
+
+        fig = plt.figure()
+        ax = fig.gca(projection='3d')
+#        ax.plot([1,2,22], [1,2,33], [1,2,44])
+#        plt.show()
+        for i in point_set:
+            for j in i:
+                #print j
+                p1 = j[0]
+                p2 = j[1]
+                p3 = j[2]
+                #print x_coords, y_coords
+                ax.plot([p1[0], p2[0]], [p1[1],\
+                        p2[1]], [p1[2], p2[2]])
+                ax.plot([p2[0], p3[0]], [p2[1],\
+                        p3[1]], [p2[2], p3[2]])
+                ax.plot([p1[0], p3[0]], [p1[1],\
+                        p3[1]], [p1[2], p3[2]])
+
+
+        plt.show()
 class Cell:
     def __init__(self, id, boundary, map_id):
         self.id = id

@@ -42,6 +42,33 @@ if __name__ == "__main__":
         for i in result:
             print i.id
     """
-    point = [3,1.5,1.5]
-    model.point_containment(point)
-    model.visualize(point)
+    #point = [1,3,3]
+    #model.point_containment(point)
+    #model.visualize(point)
+    #model.teselate()
+    model.create_graph()
+    while(1):
+        x = raw_input("-> ")
+        x = x.split()
+        x = [float(i) for i in x]
+        if x[0] == 1:
+            result = model.connected_components(x[1])
+            for i in result:
+                print i.id
+        elif x[0] == 2:
+            result = model.star(x[1])
+            for i in result:
+                print i.id
+        elif x[0] == 3:
+            point = [x[1], x[2], x[3]]
+            print model.point_containment(point)
+            model.visualize(point)
+        elif x[0] == 4:
+            print "Tessalation"
+            model.teselate()
+        elif x[0] == 5:
+            model.visualize()
+        elif x[0] == 0:
+            break
+        else:
+            print "1: connected components\n2: Star\n3: Point Containment\n4: Tesellation\n5: Visualize"

@@ -13,17 +13,17 @@ def convert_point(point_set, point_on_plane, axis):
     for i in point_set:
         z.append(i[2])
         tmp = [i[x] - point_on_plane[x] for x in range(3)]
-        print tmp
-        print "-------------------------------------------"
+
+
         tmp_u = np.dot(tmp, axis[0])
         tmp_v = np.dot(tmp, axis[1])
         u.append(tmp_u)
         v.append(tmp_v)
-    print u, v, z
+
     points = np.column_stack((u, v))
-    print points
+
     tri = triangle.delaunay(points)
-    print tri
+    return tri
 
 if __name__ =="__main__":
     print "Tessalation"
