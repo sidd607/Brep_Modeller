@@ -13,8 +13,6 @@ def convert_point(point_set, point_on_plane, axis):
     for i in point_set:
         z.append(i[2])
         tmp = [i[x] - point_on_plane[x] for x in range(3)]
-
-
         tmp_u = np.dot(tmp, axis[0])
         tmp_v = np.dot(tmp, axis[1])
         u.append(tmp_u)

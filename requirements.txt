@@ -1,0 +1,6 @@
+matplotlib==1.4.3
+matplotlib==1.4.3
+numpy==1.11.1
+scipy==0.16.0
+triangle==20160203
+sympy==1.0
