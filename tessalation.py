@@ -24,7 +24,7 @@ def convert_point(point_set, point_on_plane, axis):
     return tri
 
 if __name__ =="__main__":
-    print "Tessalation"
+    print ("Tessalation")
     #3, 0, 0 | 3, 4, 0
     point = [[0, 3, 5], [0,4,0], [3, 3, 5], [3, 4, 0]]
     point_on_plane = [3, 4, 0]

@@ -6,15 +6,15 @@ def check_intersect(p1, p3, p4):
     p3 = Point3D(p3)
     p4 = Point3D(p4)
 
-    print p1, p2, p3, p4
+    print (p1, p2, p3, p4)
 
     l1 = Line3D(p1,p2)
     l2 = Line3D(p3,p4)
 
-    print l1, l2
+    print (l1, l2)
 
     x = l1.intersection(l2)
-    print x
+    print (x)
     if len(x) == 0:
         return {"result": "false"}
     else:

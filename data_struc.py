@@ -296,7 +296,7 @@ class Model:
                     tri_set.append([p1,p2,p3])
             final_tri_set.append(tri_set)
             #print tri_set
-        print final_tri_set
+        print (final_tri_set)
         self.visualize_triangle(final_tri_set)
 
         f = open("demo.stl", "w")
